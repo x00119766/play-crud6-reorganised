@@ -13,6 +13,7 @@ import views.html.*;
 
 // Import models
 import models.*;
+import models.users.*;
 
 
 public class HomeController extends Controller {
@@ -26,14 +27,14 @@ public class HomeController extends Controller {
         this.formFactory = f;
     }
 
-    public Result index(String name) {
+    public Result index() {
 
-        return ok(index.render("Welcome to the Home page", name));
+        return ok(index.render(LoginController.getUserSession()));
     }
 
     public Result about() {
 
-        return ok(about.render());
+        return ok(about.render(LoginController.getUserSession()));
     }
 
     public Result products(Long cat) {
@@ -52,7 +53,7 @@ public class HomeController extends Controller {
             productsList = Category.find.ref(cat).getProducts();
         }
 
-        return ok(products.render(productsList, categoriesList));
+        return ok(products.render(productsList, categoriesList, LoginController.getUserSession()));
     }
 
     // Render and return  the add new product page
@@ -64,7 +65,7 @@ public class HomeController extends Controller {
         Form<Product> addProductForm = formFactory.form(Product.class);
 
         // Render the Add Product View, passing the form object   
-        return ok(addProduct.render(addProductForm));
+        return ok(addProduct.render(addProductForm, LoginController.getUserSession()));
     }
 
     @Transactional
@@ -77,7 +78,7 @@ public class HomeController extends Controller {
         // Check for errors (based on Product class annotations)
         if(newProductForm.hasErrors()) {
             // Display the form again
-            return badRequest(addProduct.render(newProductForm));
+            return badRequest(addProduct.render(newProductForm, LoginController.getUserSession()));
         }
 
         // Extract the product from the form object
@@ -120,10 +121,11 @@ public class HomeController extends Controller {
                 return badRequest("error");
         }
         // Render the updateProduct view - pass form as parameter
-        return ok(addProduct.render(productForm));
+        return ok(addProduct.render(productForm, LoginController.getUserSession()));
     }
 
     // Delete Product by id
+    @Security.Authenticated(Secured.class)
     @Transactional
     public Result deleteProduct(Long id) {
 
@@ -133,6 +135,6 @@ public class HomeController extends Controller {
         flash("success", "Product has been deleted");
 
         // Redirect to products page
-        return redirect(routes.HomeController.products(0));
+        return redirect(controllers.routes.HomeController.products(0));
     }
 }

@@ -1,10 +1,4 @@
-@*
- * This template is called from the `index` template. This template
- * handles the rendering of the page header and body tags. It takes
- * two arguments, a `String` for the title of the page and an `Html`
- * object to insert into the body of the page.
- *@
-@(title: String)(content: Html)
+@(title: String, user: models.users.User)(content: Html)
 
 <!DOCTYPE html>
 <html lang="en">
@@ -25,9 +19,23 @@
             </div>
             <!-- List containing nav links -->
             <ul class="nav navbar-nav">
-                <li @if(title == "Home"){class="active"}><a href="@routes.HomeController.index()">Home</a></li>
-                <li @if(title == "About"){class="active"}><a href="@routes.HomeController.about()">About Us</a></li>
-                <li @if(title == "Products"){class="active"}><a href="@routes.HomeController.products()">Products</a></li>
+                <li @if(title == "Home"){class="active"}>
+                    <a href="@routes.HomeController.index()">Home</a>
+                </li>
+                <li @if(title == "About"){class="active"}>
+                    <a href="@routes.HomeController.about()">About Us</a>
+                </li>
+                <li @if(title == "Products"){class="active"}>
+                    <a href="@routes.HomeController.products()">Products</a>
+                </li>
+                <!-- Login/ Logout  Link - Check if user logged in-->
+                <li @if(title == "Login"){class="active"}>
+                    @if(user != null) {
+                        <a href="@routes.LoginController.logout()">Logout @user.getName()</a>
+                    } else {
+                        <a href="@routes.LoginController.login()">Login</a>
+                    }
+                </li>
             </ul>
     </nav>
     
