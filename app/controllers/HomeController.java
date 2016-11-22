@@ -27,14 +27,19 @@ public class HomeController extends Controller {
         this.formFactory = f;
     }
 
+    // Method retuns the logged in user (or null)
+    private User getUserFromSession() {
+        return User.getUserById(session().get("email"));
+    }
+
     public Result index() {
 
-        return ok(index.render(LoginController.getUserSession()));
+        return ok(index.render(getUserFromSession()));
     }
 
     public Result about() {
 
-        return ok(about.render(LoginController.getUserSession()));
+        return ok(about.render(getUserFromSession()));
     }
 
     public Result products(Long cat) {
@@ -53,11 +58,12 @@ public class HomeController extends Controller {
             productsList = Category.find.ref(cat).getProducts();
         }
 
-        return ok(products.render(productsList, categoriesList, LoginController.getUserSession()));
+        return ok(products.render(productsList, categoriesList, getUserFromSession()));
     }
 
     // Render and return  the add new product page
     // The page will load and display an empty add product form
+    @Security.Authenticated(Secured.class)
     public Result addProduct() {
 
         // Create a form by wrapping the Product class
@@ -65,10 +71,11 @@ public class HomeController extends Controller {
         Form<Product> addProductForm = formFactory.form(Product.class);
 
         // Render the Add Product View, passing the form object   
-        return ok(addProduct.render(addProductForm, LoginController.getUserSession()));
+        return ok(addProduct.render(addProductForm, getUserFromSession()));
     }
 
     @Transactional
+    @Security.Authenticated(Secured.class)
     public Result addProductSubmit() {
 
         // Create a product form object (to hold submitted data)
@@ -78,7 +85,7 @@ public class HomeController extends Controller {
         // Check for errors (based on Product class annotations)
         if(newProductForm.hasErrors()) {
             // Display the form again
-            return badRequest(addProduct.render(newProductForm, LoginController.getUserSession()));
+            return badRequest(addProduct.render(newProductForm, getUserFromSession()));
         }
 
         // Extract the product from the form object
@@ -103,6 +110,7 @@ public class HomeController extends Controller {
 
     // Update a product by ID
     // called when edit button is pressed
+    @Security.Authenticated(Secured.class)
     @Transactional
     public Result updateProduct(Long id) {
 
@@ -121,7 +129,7 @@ public class HomeController extends Controller {
                 return badRequest("error");
         }
         // Render the updateProduct view - pass form as parameter
-        return ok(addProduct.render(productForm, LoginController.getUserSession()));
+        return ok(addProduct.render(productForm, getUserFromSession()));
     }
 
     // Delete Product by id
@@ -137,4 +145,5 @@ public class HomeController extends Controller {
         // Redirect to products page
         return redirect(controllers.routes.HomeController.products(0));
     }
+
 }
