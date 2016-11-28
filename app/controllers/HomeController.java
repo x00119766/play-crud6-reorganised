@@ -134,6 +134,9 @@ public class HomeController extends Controller {
 
     // Delete Product by id
     @Security.Authenticated(Secured.class)
+    // Authorise user (check if admin)
+    @With(AuthAdmin.class)
+
     @Transactional
     public Result deleteProduct(Long id) {
 

@@ -1,11 +1,7 @@
 package controllers;
 
-import play.*;
 import play.mvc.*;
 import play.mvc.Http.*;
-
-import models.*;
-import models.users.*;
 
 // This class returns a user id (email) if a user is logged in
 // If not logged in redirect to login page
