@@ -8,12 +8,12 @@
           <h4>Categories</h4>
             <div class="list-group">
                 <!-- A link to display all products -->
-                <a href="@routes.HomeController.products(0)" class="list-group-item">All categories</a>
+                <a href="@routes.AdminController.products(0)" class="list-group-item">All categories</a>
 
                 <!-- Start of For loop - For each c in categories add a list item -->
                 <!-- Also show the number of products in each category -->
                 @for(c <- categories) {
-                    <a href="@routes.HomeController.products(c.getId)" class="list-group-item">@c.getName
+                    <a href="@routes.AdminController.products(c.getId)" class="list-group-item">@c.getName
                       <span class="badge">@c.getProducts.size()</span>
                     </a>
                 }
@@ -42,18 +42,44 @@
             <!-- Product row(s) -->
 					<!-- Start of For loop - For each p in products add a row -->
           @for(p <- products) {
-              <tr>
+			        <tr>
                   <td>@p.getId</td>
                   <td>@p.getName</td>
                   <td>@p.getCategory.getName</td>
                   <td>@p.getDescription</td>
                   <td>@p.getStock</td>
                   <td>&euro; @("%.2f".format(p.getPrice))</td>
-              </tr>
+
+                  <!-- Edit product button -->
+                  <td>
+                      <a href="@routes.AdminController.updateProduct(p.getId)" class="btn-xs btn-danger">
+                      <span class="glyphicon glyphicon-pencil"></span></a>
+                  </td>
+                  <!-- Delete product button -->
+                  <td>
+                      <a href="@routes.AdminController.deleteProduct(p.getId)" class="btn-xs btn-danger"
+                        onclick="return confirmDel();">
+                        <span class="glyphicon glyphicon-trash"></span>
+                      </a>
+                  </td>
+				    </tr>
 					} <!-- End of For loop -->
           </tbody>
         </table>
+        <p>
+          <a href="@routes.AdminController.addProduct()">
+            <button class="btn btn-primary">Add a Product</button>
+          </a>
+        </p>
       </div>
   </div>
+
+  <script>
+    // JavaScript function returns true if user clicks yes, otherwise, false
+    function confirmDel() {
+        return confirm('Are you sure?');
+    }
+  </script>
+
   <!-- End of content for main -->
 }

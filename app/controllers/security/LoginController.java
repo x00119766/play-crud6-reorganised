@@ -1,12 +1,9 @@
-package controllers;
+package controllers.security;
 
 import play.api.Environment;
 import play.mvc.*;
 import play.data.*;
-import play.db.ebean.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.inject.Inject;
 
 import views.html.*;
@@ -60,7 +57,13 @@ public class LoginController extends Controller {
             session("email", loginForm.get().getEmail());
         }
         // Return to home page
-        return redirect(controllers.routes.HomeController.index());
+        User u = User.getUserById(session().get("email"));
+        if (u.getRole() == "admin") {
+            return redirect(controllers.routes.AdminController.products(0));
+        }
+        else {
+            return redirect(controllers.routes.HomeController.index());
+        }
     }
 
     // Logout
@@ -69,7 +72,7 @@ public class LoginController extends Controller {
         // Generates a new session id
         session().clear();
         flash("success", "You've been logged out");
-        return redirect(routes.LoginController.login());
+        return redirect(LoginController.login());
     }
 
 }

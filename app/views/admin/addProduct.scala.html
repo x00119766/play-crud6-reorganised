@@ -1,15 +1,15 @@
 @* addProductForm defined above is the parameter passed to this view by the controller *@
 @import helper._
 
-@(addProductForm: Form[models.Product], user: models.users.User)
+@(addProductForm: play.data.Form[models.Product], user: models.users.User)
 
 @* helpers will be used to create the form dynamically, though static HTML form element also work. *@
 
-@main("Add Product", user) {
+@admin.adminMain("Add Product", user) {
 	<h3>Add a new Product</h3>
 	
 	<!-- Use the views.html.helpers package to create the form -->
-	@form(action = routes.HomeController.addProductSubmit(), 'class -> "form-horizontal", 'role->"form") {
+	@form(action = routes.AdminController.addProductSubmit(), 'class -> "form-horizontal", 'role->"form") {
 		
 		<!-- Build the form, adding an input for each field -->
 		<!-- Note the label parameter -->
@@ -32,7 +32,7 @@
 	<!-- Add a submit button -->
   <div class="actions">
       <input type="submit" value="Save" class="btn btn-primary">
-			<a href="@routes.HomeController.products()"><button class="btn btn-warning">Cancel</button>
+			<a href="@routes.AdminController.products()"><button class="btn btn-warning">Cancel</button>
 	  		</a>
   </div>
 	} <!-- End Form definition -->

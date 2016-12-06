@@ -17,18 +17,12 @@
     <nav class="navbar navbar-inverse">
             <!-- nav header/ branding -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">Product Catalogue</a>
+                <a class="navbar-brand" href="/">Product Admin</a>
             </div>
             <!-- List containing nav links -->
             <ul class="nav navbar-nav">
-                <li @if(title == "Home"){class="active"}>
-                    <a href="@routes.HomeController.index()">Home</a>
-                </li>
-                <li @if(title == "About"){class="active"}>
-                    <a href="@routes.HomeController.about()">About Us</a>
-                </li>
                 <li @if(title == "Products"){class="active"}>
-                    <a href="@routes.HomeController.products()">Products</a>
+                    <a href="@routes.AdminController.products()">Products</a>
                 </li>
                 <!-- Login/ Logout  Link - Check if user logged in-->
                 <li @if(title == "Login"){class="active"}>
