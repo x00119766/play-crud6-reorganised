@@ -97,7 +97,7 @@ public class AdminController extends Controller {
         flash("success", "Product " + p.getName() + " has been created/ updated");
 
         // Redirect to the admin home
-        return redirect(AdminController.products(0));
+        return redirect(routes.AdminController.products(0));
     }
 
     // Update a product by ID
@@ -133,7 +133,7 @@ public class AdminController extends Controller {
         flash("success", "Product has been deleted");
 
         // Redirect to products page
-        return redirect(AdminController.products(0));
+        return redirect(routes.AdminController.products(0));
     }
 
 }

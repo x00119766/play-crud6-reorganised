@@ -27,9 +27,9 @@
                 <!-- Login/ Logout  Link - Check if user logged in-->
                 <li @if(title == "Login"){class="active"}>
                     @if(user != null) {
-                        <a href="@LoginController.logout()">Logout @user.getName()</a>
+                        <a href="@controllers.security.routes.LoginController.logout()">Logout @user.getName()</a>
                     } else {
-                        <a href="@security.LoginController.login()">Login</a>
+                        <a href="@controllers.security.routes.LoginController.login()">Login</a>
                     }
                 </li>
             </ul>

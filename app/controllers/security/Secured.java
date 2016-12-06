@@ -18,6 +18,6 @@ public class Secured extends Security.Authenticator {
     // If not logged in then open the login page
     @Override
     public Result onUnauthorized(Context ctx) {
-        return redirect(LoginController.login());
+        return redirect(routes.LoginController.login());
     }
 }

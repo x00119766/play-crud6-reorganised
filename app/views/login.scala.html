@@ -1,4 +1,3 @@
-@import controllers.security.LoginController
 @(loginForm: Form[models.users.Login], user: models.users.User)
 @import helper._
 
@@ -19,7 +18,7 @@
             </div>
         }
             <!-- The login form -->
-        @helper.form(action = LoginController.loginSubmit()) {
+        @helper.form(action = controllers.security.routes.LoginController.loginSubmit()) {
 
             <div class="form-group">
                 @inputText(loginForm("email"), '_label -> "",'class -> "form-control input-xs", 'placeholder -> "Email")

@@ -56,9 +56,9 @@ public class LoginController extends Controller {
             // Store the logged in email in the session (cookie)
             session("email", loginForm.get().getEmail());
         }
-        // Return to home page
+        // Return to admin or customer home page
         User u = User.getUserById(session().get("email"));
-        if (u.getRole() == "admin") {
+        if (u.getRole().equals("admin")) {
             return redirect(controllers.routes.AdminController.products(0));
         }
         else {
@@ -72,7 +72,7 @@ public class LoginController extends Controller {
         // Generates a new session id
         session().clear();
         flash("success", "You've been logged out");
-        return redirect(LoginController.login());
+        return redirect(routes.LoginController.login());
     }
 
 }
