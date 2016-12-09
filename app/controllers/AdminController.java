@@ -14,6 +14,15 @@ import views.html.admin.*;
 import models.*;
 import models.users.User;
 
+import play.mvc.Http.*;
+import play.mvc.Http.MultipartFormData.FilePart;
+import java.io.File;
+
+// File upload and image editing dependencies
+import org.im4java.core.ConvertCmd;
+import org.im4java.core.IMOperation;
+
+
 // Require Login
 @Security.Authenticated(Secured.class)
 // Authorise user (check if admin)
@@ -70,6 +79,8 @@ public class AdminController extends Controller {
     @Transactional
     public Result addProductSubmit() {
 
+        String saveImageMsg;
+
         // Create a product form object (to hold submitted data)
         // 'Bind' the object to the submitted form (this copies the filled form)
         Form<Product> newProductForm = formFactory.form(Product.class).bindFromRequest();
@@ -91,10 +102,22 @@ public class AdminController extends Controller {
         else if (p.getId() != null) {
             p.update();
         }
+        
+
+        //save image
+        //get the image data
+        MultipartFormData data = request().body().asMultipartFormData();
+        FilePart image = data.getFile("upload");
+
+        //save the image file
+        saveImageMsg = saveFile(p.getId(), image);
+        
+
+
 
         // Set a success message in temporary flash
         // for display in return view
-        flash("success", "Product " + p.getName() + " has been created/ updated");
+        flash("success", "Product " + p.getName() + " has been created/ updated" + saveImageMsg);
 
         // Redirect to the admin home
         return redirect(routes.AdminController.products(0));
@@ -135,5 +158,48 @@ public class AdminController extends Controller {
         // Redirect to products page
         return redirect(routes.AdminController.products(0));
     }
+
+   public String saveFile(Long id, FilePart<File> image) {
+       if (image != null) {
+
+           String mimeType = image.getContentType();
+
+           //check if this ia an image
+           if (mimeType.startsWith("image/")) {
+
+               File file = image.getFile();
+
+               ConvertCmd cmd = new ConvertCmd();
+
+               IMOperation op = new IMOperation();
+
+               op.addImage(file.getAbsolutePath());
+
+               op.resize(300, 200);
+
+               op.addImage("public/images/productImages/" + id + ".jpg");
+
+               IMOperation thumb = new IMOperation();
+
+               thumb.addImage(file.getAbsolutePath());
+               thumb.thumbnail(60);
+
+               thumb.addImage("public/images/productImages/thumbnails/" + id + ".jpg");
+
+               try {
+                   cmd.run(op);
+                   cmd.run(thumb);
+               } catch (Exception e) {
+                  // e.printStacktrace();
+               }
+               return " and image saved";
+           }
+       }
+       return "image file missing";
+   }
+
+
+
+
 
 }
