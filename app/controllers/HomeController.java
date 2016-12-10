@@ -23,11 +23,11 @@ public class HomeController extends Controller {
     // Declare a private FormFactory instance
     private FormFactory formFactory;
 
-    private Enviroment env;
+    private Environment env;
 
     //  Inject an instance of FormFactory it into the controller via its constructor
     @Inject
-    public HomeController(FormFactory f, Envoroment e) {
+    public HomeController(FormFactory f, Environment e) {
 
         this.formFactory = f;
         this.env = e;

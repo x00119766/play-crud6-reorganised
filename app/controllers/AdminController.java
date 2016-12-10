@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import play.api.Environment;
+
 import views.html.admin.*;
 import models.*;
 import models.users.User;
@@ -32,10 +34,14 @@ public class AdminController extends Controller {
     // Declare a private FormFactory instance
     private FormFactory formFactory;
 
+    private Environment env;
+
+    
     //  Inject an instance of FormFactory it into the controller via its constructor
     @Inject
-    public AdminController(FormFactory f) {
+    public AdminController(FormFactory f,  Environment e) {
         this.formFactory = f;
+        this.env = e;
     }
 
     // Method returns the logged in user (or null)
@@ -60,7 +66,7 @@ public class AdminController extends Controller {
             productsList = Category.find.ref(cat).getProducts();
         }
 
-        return ok(products.render(productsList, categoriesList, getUserFromSession()));
+        return ok(products.render(productsList, categoriesList, getUserFromSession(), env));
     }
 
     // Render and return  the add new product page

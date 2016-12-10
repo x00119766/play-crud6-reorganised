@@ -1,4 +1,4 @@
-@(products: List[models.Product], categories: List[models.Category], user: models.users.User)
+@(products: List[models.Product], categories: List[models.Category], user: models.users.User, env: play.api.Environment)
 
 <!-- Pass page title and content {html between braces} to the main view -->
 @admin.adminMain("Products", user) {
